@@ -1,0 +1,137 @@
+
+//+------------------------------------------------------------------+
+//|                                         AverageTrueRange.mq5 |
+//|                 Copyright 2022, Forex Robot Easy Team            |
+//|                                         forexroboteasy.com      |
+//+------------------------------------------------------------------+
+#property copyright 'Copyright 2022, Forex Robot Easy Team'
+#property link      'forexroboteasy.com'
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//+------------------------------------------------------------------+
+
+// Define input parameters
+input int period = 14;
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//+------------------------------------------------------------------+
+
+// Calculate Average True Range
+double AverageTrueRange()
+{
+   double trSum = 0;
+   double atr = 0;
+   double prevClose = 0;
+
+   // Iterate through the specified number of days
+   for(int i = 0; i < period; i++)
+   {
+      // Get the current day's high, low, and close prices
+      double high = High[i];
+      double low = Low[i];
+      double close = Close[i];
+
+      // Calculate the true range for the current day
+      double tr = MathMax(high - low, MathMax(MathAbs(high - prevClose), MathAbs(low - prevClose)));
+
+      // Sum up the true range values
+      trSum += tr;
+
+      // Store the current day's close price for the next iteration
+      prevClose = close;
+   }
+
+   // Calculate the average true range
+   atr = trSum / period;
+
+   return atr;
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//+------------------------------------------------------------------+
+
+// Initialize the indicator
+int OnInit()
+{
+   // Print the calculated average true range
+   Print('Average True Range: ', AverageTrueRange());
+
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//+------------------------------------------------------------------+
+
+// Update the indicator on each tick
+void OnTick()
+{
+   // Print the updated average true range
+   Print('Average True Range: ', AverageTrueRange());
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//+------------------------------------------------------------------+
+
+// Handle any errors that occur during the execution of the code
+void OnError(const int error_code, const string error_message)
+{
+   Print('Error: ', error_message);
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//|                                                                  |
+//+------------------------------------------------------------------+
+
